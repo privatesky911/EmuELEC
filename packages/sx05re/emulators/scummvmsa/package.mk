@@ -3,14 +3,15 @@
 
 PKG_NAME="scummvmsa"
 PKG_VERSION="707a85466882f5d36f0bdf6d732a98da0760382c"
-PKG_SHA256="0cfe38538a37e74473465810d960e8aea822fe0dae8ee1f06c3fb08f2c99f465"
-PKG_REV="1"
-PKG_LICENSE="GPL2"
+PKG_LICENSE="GPLv2"
+PKG_GIT_CLONE_BRANCH="branch-2-8"
 PKG_SITE="https://github.com/scummvm/scummvm"
-PKG_URL="${PKG_SITE}/archive/${PKG_VERSION}.tar.gz"
+PKG_URL="${PKG_SITE}.git"
 PKG_DEPENDS_TARGET="toolchain SDL2 SDL2_net freetype fluidsynth-git libmad"
 PKG_SHORTDESC="Script Creation Utility for Maniac Mansion Virtual Machine"
 PKG_LONGDESC="ScummVM is a program which allows you to run certain classic graphical point-and-click adventure games, provided you already have their data files."
+
+PKG_GIT_CLONE_BRANCH="master"
 
 pre_configure_target() { 
 TARGET_CONFIGURE_OPTS=" --disable-opengl-game --disable-opengl-game-classic --disable-opengl-game-shaders --host=${TARGET_NAME} --backend=sdl --enable-vkeybd --enable-optimizations --opengl-mode=gles2 --with-sdl-prefix=${SYSROOT_PREFIX}/usr/bin"
