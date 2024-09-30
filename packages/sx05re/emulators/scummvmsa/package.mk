@@ -15,6 +15,10 @@ PKG_GIT_CLONE_BRANCH="master"
 
 pre_configure_target() { 
 TARGET_CONFIGURE_OPTS=" --disable-opengl-game --disable-opengl-game-classic --disable-opengl-game-shaders --host=${TARGET_NAME} --backend=sdl --enable-vkeybd --enable-optimizations --opengl-mode=gles2 --with-sdl-prefix=${SYSROOT_PREFIX}/usr/bin"
+
+  # fix include .h of adl
+  cd ${PKG_BUILD}
+  sed -i 's|-I\$\(srcdir\)\/engines|-I\$\(srcdir\)\/engines\ -I\$\(srcdir\)\/engines\/adl|' Makefile
 }
 
 post_makeinstall_target() {
