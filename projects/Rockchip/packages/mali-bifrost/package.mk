@@ -8,6 +8,12 @@ PKG_ARCH="arm aarch64"
 PKG_LICENSE="nonfree"
 PKG_SITE="https://github.com/emuelec/libmali"
 PKG_URL="${PKG_SITE}/archive/${PKG_VERSION}.tar.gz"
+
+if [ "${DEVICE}" = "RK3576" ]; then
+  PKG_URL="file://${ROOT}/sources/mali-bifrost/mali-bifrost-rk3576.tar.gz"
+  PKG_SHA256="61f3e017428e3badceb357e394158775a62665453eb1f357406648d65556680e"
+  PKG_MESON_OPTS_TARGET+=" -Dplatform=gbm -Dgpu=bifrost-g52 -Dversion=g2p0 -Dhooks=false"
+fi
 PKG_DEPENDS_TARGET="toolchain libdrm"
 PKG_LONGDESC="The Mali GPU library used in Rockchip Platform for Odroidgo Advance"
 
@@ -15,7 +21,7 @@ PKG_LONGDESC="The Mali GPU library used in Rockchip Platform for Odroidgo Advanc
 
 pre_configure_target() {
 
-if [ "${DEVICE}" != "RK356x" ] && [ "$DEVICE" != "OdroidM1" ]; then
+if [ "${DEVICE}" != "RK356x" ] && [ "$DEVICE" != "OdroidM1" ] && [ "$DEVICE" != "RK3576" ]; then
 # Testing new version, Vulkan in the name means nothing, Vulkan is not working.
 BLOB_PKG="rk3326_r13p0_gbm_with_vulkan_and_cl.zip"
 BLOB_SUM="ef1a18fabf270d0a6029917d6b0e6237d328613c2f8be4d420ea23e022288dd9"
@@ -42,7 +48,7 @@ makeinstall_target() {
 	# remove all the extra blobs, we only need one
 	rm -rf ${INSTALL}/usr
 
-if [ "${DEVICE}" != "RK356x" ] && [ "$DEVICE" != "OdroidM1" ]; then
+if [ "${DEVICE}" != "RK356x" ] && [ "$DEVICE" != "OdroidM1" ] && [ "$DEVICE" != "RK3576" ]; then
 	if [ "$ARCH" == "arm" ]; then
 		BLOB="libmali.so_rk3326_gbm_arm32_r13p0_with_vulkan_and_cl"
 	else

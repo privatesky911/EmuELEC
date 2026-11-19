@@ -15,7 +15,7 @@ PKG_EMUS="${LIBRETRO_CORES} advancemame PPSSPPSDL amiberry hatarisa openbor dosb
 PKG_DEPENDS_TARGET+=" emuelec-tools ${PKG_EMUS} ${PKG_EXPERIMENTAL} emuelec-ports"
 
 # These packages are only meant for S922x, S905x2 and A311D devices as they run poorly on S905" 
-if [ "${DEVICE}" == "Amlogic-ng" ] || [ "${DEVICE}" == "RK356x" ] || [ "${DEVICE}" == "OdroidM1" ]; then
+if [ "${DEVICE}" == "Amlogic-ng" ] || [ "${DEVICE}" == "RK356x" ] || [ "${DEVICE}" == "RK3576" ] || [ "${DEVICE}" == "OdroidM1" ]; then
 	PKG_DEPENDS_TARGET+=" ${LIBRETRO_S922X_CORES} mame2016 xow"
 fi
 
@@ -51,7 +51,7 @@ if [ "${ARCH}" == "aarch64" ]; then
                         lib32-box86
                         lib32-libusb"
 
-  if [ "${DEVICE}" == "Amlogic-ng" ] || [ "${DEVICE}" == "RK356x" ] || [ "${DEVICE}" == "OdroidM1" ]; then
+  if [ "${DEVICE}" == "Amlogic-ng" ] || [ "${DEVICE}" == "RK356x" ] || [ "${DEVICE}" == "RK3576" ] || [ "${DEVICE}" == "OdroidM1" ]; then
     PKG_DEPENDS_TARGET+=" dolphinSA"
   fi
 

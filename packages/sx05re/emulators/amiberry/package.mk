@@ -27,7 +27,7 @@ pre_configure_target() {
     'OdroidGoAdvance'|'GameForce')
       DEVICE_PLATFORMS=('oga' 'RK3326')
       ;;
-    'RK356x'|'OdroidM1')
+    'RK356x'|'OdroidM1'|'RK3576')
       DEVICE_PLATFORMS=('a64' 'a64')
       ;;
     *)

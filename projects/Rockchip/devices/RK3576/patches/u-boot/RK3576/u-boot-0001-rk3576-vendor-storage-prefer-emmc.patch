@@ -1,0 +1,60 @@
+Fix vendor storage device selection when booting from SD
+
+Vendor storage (SN/WiFi/LAN/BT) is provisioned in the eMMC reserved
+area by the factory tool. rockchip_get_bootdev() follows the boot
+medium, so booting from an SD/TF card reads an empty area, generates
+a random MAC and writes it back to the card instead of using the
+factory MAC burned into eMMC. Fall back to the eMMC block device
+whenever the boot device is a secondary MMC device.
+
+--- a/arch/arm/mach-rockchip/vendor.c
++++ b/arch/arm/mach-rockchip/vendor.c
+@@ -311,13 +311,37 @@
+ /**********************************************************/
+ /*              vendor API implementation                 */
+ /**********************************************************/
++
++/*
++ * Vendor storage (SN/MAC) is provisioned in the eMMC reserved area by the
++ * factory tool. rockchip_get_bootdev() follows the boot medium, so booting
++ * from an SD card would read an empty area and hide the burned values.
++ */
++static struct blk_desc *vendor_storage_get_dev(void)
++{
++	struct blk_desc *dev_desc;
++	struct blk_desc *emmc;
++
++	dev_desc = rockchip_get_bootdev();
++	if (!dev_desc)
++		return NULL;
++
++	if (dev_desc->if_type == IF_TYPE_MMC && dev_desc->devnum != 0) {
++		emmc = blk_get_devnum_by_type(IF_TYPE_MMC, 0);
++		if (emmc)
++			dev_desc = emmc;
++	}
++
++	return dev_desc;
++}
++
+ static int vendor_ops(u8 *buffer, u32 addr, u32 n_sec, int write)
+ {
+ 	struct blk_desc *dev_desc;
+ 	unsigned int lba = 0;
+ 	int ret = 0;
+ 
+-	dev_desc = rockchip_get_bootdev();
++	dev_desc = vendor_storage_get_dev();
+ 	if (!dev_desc) {
+ 		printf("%s: dev_desc is NULL!\n", __func__);
+ 		return -ENODEV;
+@@ -435,7 +459,7 @@
+ 	u16 version2_offset, part_size;
+ 	struct blk_desc *dev_desc;
+ 
+-	dev_desc = rockchip_get_bootdev();
++	dev_desc = vendor_storage_get_dev();
+ 	if (!dev_desc) {
+ 		printf("[Vendor ERROR]:Invalid boot device type(%d)\n",
+ 		       bootdev_type);
+

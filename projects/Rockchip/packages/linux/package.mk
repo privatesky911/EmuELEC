@@ -28,6 +28,13 @@ case "$LINUX" in
     PKG_SOURCE_NAME="linux-$LINUX-$PKG_VERSION.tar.gz"
     PKG_PATCH_DIRS="RK356x"
     ;;
+  rk3576-6.1)
+    PKG_VERSION="886d9e9f2a304afc0b3fb14b32ae19d12321c699"
+    PKG_SHA256="f4d26d615d4e18c6774a05033b74e9d3adfc3d19c3c40e6ef35082df6d634ee9"
+    PKG_URL="https://gitlab.com/firefly-linux/kernel/-/archive/$PKG_VERSION/kernel-$PKG_VERSION.tar.gz"
+    PKG_SOURCE_NAME="linux-$LINUX-$PKG_VERSION.tar.gz"
+    PKG_PATCH_DIRS="RK3576"
+    ;;
   OdroidM1-4.19)
     PKG_VERSION="e45b118834e1395eeacbed77e8b8f35e8105663e"
     PKG_SHA256="3c4f1bea0b8c26d9951c8b46c6c93127fc0929ff9947c5eb8e479fbaf05fa1f4"
@@ -107,13 +114,20 @@ post_patch() {
 
 post_unpack() {
   # Add exFAT
+  if [ -f "${PKG_BUILD}/fs/exfat/Kconfig" ]; then
+    return 0
+  fi
   ${SCRIPTS}/get exfat-linux
   local PKG_BUILD_EXFAT="${PKG_BUILD}/fs/exfat"
   [ -e "$PKG_BUILD_EXFAT" ] && rm -rf "$PKG_BUILD_EXFAT"
   mkdir -p "$PKG_BUILD_EXFAT"
   tar --strip-components=1 -xf "${SOURCES}/exfat-linux/exfat-linux-$(get_pkg_version exfat-linux).tar.gz" -C "$PKG_BUILD_EXFAT"
-  sed -i '/source "fs\/fat\/Kconfig"/a source "fs\/exfat\/Kconfig"' "${PKG_BUILD}/fs/Kconfig"
-  sed -i '/obj-$(CONFIG_FAT_FS).*+= fat\//a obj-$(CONFIG_EXFAT_FS)\t\t+= exfat\/' "${PKG_BUILD}/fs/Makefile"
+  if ! grep -q '^source "fs/exfat/Kconfig"' "${PKG_BUILD}/fs/Kconfig"; then
+    sed -i '/source "fs\/fat\/Kconfig"/a source "fs\/exfat\/Kconfig"' "${PKG_BUILD}/fs/Kconfig"
+  fi
+  if ! grep -q '^obj-$(CONFIG_EXFAT_FS)[[:space:]]*+= exfat/' "${PKG_BUILD}/fs/Makefile"; then
+    sed -i '/obj-$(CONFIG_FAT_FS).*+= fat\//a obj-$(CONFIG_EXFAT_FS)\t\t+= exfat\/' "${PKG_BUILD}/fs/Makefile"
+  fi
 }
 
 make_host() {

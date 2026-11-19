@@ -8,19 +8,21 @@ PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://github.com/EmuELEC/emuelec-emulationstation"
-PKG_URL="${PKG_SITE}.git"
+PKG_URL="file://${ROOT}/sources/emuelec-emulationstation/emuelec-emulationstation-${PKG_VERSION}.tar.gz"
+PKG_SHA256="a8ded395feed2358a4e7aeca1352b1dff6a8636b7e1e0ed1fd2247b766514cac"
+PKG_SOURCE_DIR="emuelec-emulationstation-${PKG_VERSION}"
 PKG_DEPENDS_TARGET="toolchain SDL2 freetype freeimage vlc rapidjson ${OPENGLES} SDL2_mixer fping p7zip espeak"
 PKG_SECTION="emuelec"
 PKG_SHORTDESC="Emulationstation emulator frontend"
 PKG_BUILD_FLAGS="-gold"
-GET_HANDLER_SUPPORT="git"
+GET_HANDLER_SUPPORT="file"
 
 
 if [[ ${DEVICE} == "OdroidGoAdvance"  ]] || [[ ${DEVICE} == "GameForce"  ]]; then 
 	PKG_PATCH_DIRS="Rockchip/HH"
 fi
 
-if [[ ${DEVICE} == "OdroidM1"  ]] || [[ ${DEVICE} == "RK356x"  ]]; then 
+if [[ ${DEVICE} == "OdroidM1"  ]] || [[ ${DEVICE} == "RK356x"  ]] || [[ ${DEVICE} == "RK3576" ]]; then 
 	PKG_PATCH_DIRS="Rockchip"
 fi
 

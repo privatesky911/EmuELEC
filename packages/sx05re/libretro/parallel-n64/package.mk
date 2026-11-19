@@ -30,7 +30,7 @@ if [[ "${ARCH}" == "arm" ]]; then
 		PKG_MAKE_OPTS_TARGET=" platform=Odroidgoa"
 	fi
 	
-	if [ "${DEVICE}" == "RK356x" ] || [ "${DEVICE}" == "OdroidM1" ]; then
+	if [ "${DEVICE}" == "RK356x" ] || [ "${DEVICE}" == "OdroidM1" ] || [ "${DEVICE}" == "RK3576" ]; then
 		PKG_MAKE_OPTS_TARGET=" platform=Odroidgoa-RK356x"
 	fi
 else

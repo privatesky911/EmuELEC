@@ -20,17 +20,19 @@
 
 PKG_NAME="sameduck"
 PKG_VERSION="5619abdb01cee6bedb47599cdb5532c318443b52"
+PKG_SHA256="101bd2876c0b6c63abc91b3971fa1c203c955d4a86a5c54ce6172ee5ab729456"
+PKG_SOURCE_DIR="SameBoy-${PKG_VERSION}"
 PKG_ARCH="any"
 PKG_LICENSE="MIT"
 PKG_SITE="https://github.com/LIJI32/SameBoy"
-PKG_URL="${PKG_SITE}.git"
+PKG_URL="file://${ROOT}/sources/sameduck/sameduck-${PKG_VERSION}.tar.gz"
 PKG_GIT_CLONE_BRANCH="SameDuck"
 PKG_DEPENDS_TARGET="toolchain"
 PKG_PRIORITY="optional"
 PKG_SECTION="libretro"
 PKG_SHORTDESC="Mega Duck / Cougar Boy emulator written in C"
 PKG_LONGDESC="Mega Duck / Cougar Boy emulator written in C"
-GET_HANDLER_SUPPORT="git"
+GET_HANDLER_SUPPORT="file"
 
 
 PKG_IS_ADDON="no"

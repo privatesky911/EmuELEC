@@ -303,6 +303,12 @@ devices = \
          'config' : 'firefly-rk3568_defconfig' 
          },
     },
+    'RK3576': {
+      'rk3576': {
+        'dtb': 'rk3576-firefly-roc-rk3576-pc.dtb',
+        'config': 'rk3576_defconfig'
+      },
+    },
     'OdroidM1': { 
       'OdroidM1': {
         'dtb': 'rk3568-odroid-m1.dtb',
