@@ -1,0 +1,77 @@
+diff --git a/src/common/cutscenes/movieplayer.cpp b/src/common/cutscenes/movieplayer.cpp
+index a1b04385f..af9857904 100644
+--- a/src/common/cutscenes/movieplayer.cpp
++++ b/src/common/cutscenes/movieplayer.cpp
+@@ -42,8 +42,10 @@
+ #include "gamestate.h"
+ #include "SmackerDecoder.h"
+ #include "playmve.h"
++#ifdef USE_LIBVPX
+ #include <vpx/vpx_decoder.h>
+ #include <vpx/vp8dx.h>
++#endif
+ #include "filesystem.h"
+ #include "vm.h"
+ #include "printf.h"
+@@ -309,6 +311,7 @@ public:
+ //
+ //---------------------------------------------------------------------------
+ 
++#ifdef USE_LIBVPX
+ class VpxPlayer : public MoviePlayer
+ {
+ 	bool failed = false;
+@@ -632,6 +635,7 @@ public:
+ 		return animtex.GetFrameID();
+ 	}
+ };
++#endif
+ 
+ //---------------------------------------------------------------------------
+ //
+@@ -903,6 +907,7 @@ MoviePlayer* OpenMovie(const char* filename, TArray<int>& ans, const int* framet
+ 		}
+ 		return anm;
+ 	}
++#ifdef USE_LIBVPX
+ 	else if (!memcmp(id, "DKIF\0\0 \0VP80", 12) || !memcmp(id, "DKIF\0\0 \0VP90", 12))
+ 	{
+ 		auto anm = new VpxPlayer(fr, ans, frameticks ? frameticks[1] : 0, flags, error);
+@@ -917,6 +922,7 @@ MoviePlayer* OpenMovie(const char* filename, TArray<int>& ans, const int* framet
+ 		anm->soundtrack = fileSystem.FindFileWithExtensions(name.GetChars(), knownSoundExts, countof(knownSoundExts));
+ 		return anm;
+ 	}
++#endif
+ 	// add more formats here.
+ 	else
+ 	{
+diff --git a/src/common/textures/animtexture.cpp b/src/common/textures/animtexture.cpp
+index 1e9ee6d80..38ab2d065 100644
+--- a/src/common/textures/animtexture.cpp
++++ b/src/common/textures/animtexture.cpp
+@@ -35,7 +35,9 @@
+ #include "bitmap.h"
+ #include "texturemanager.h"
+ 
++#ifdef USE_LIBVPX
+ #include "vpx/vpx_image.h"
++#endif
+ 
+ 
+ //==========================================================================
+@@ -86,6 +88,7 @@ void AnimTexture::SetFrame(const uint8_t* Palette, const void* data_)
+ 				dpix += 4;
+ 			}
+ 		}
++#ifdef USE_LIBVPX
+ 		else if(pixelformat == VPX)
+ 		{
+ 			const vpx_image_t *img = reinterpret_cast<const vpx_image_t *>(data_);
+@@ -164,6 +167,7 @@ void AnimTexture::SetFrame(const uint8_t* Palette, const void* data_)
+ 				}
+ 			}
+ 		}
++#endif
+ 		else if(pixelformat == RGB)
+ 		{
+ 			const uint8_t *img = reinterpret_cast<const uint8_t *>(data_);

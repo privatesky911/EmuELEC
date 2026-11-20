@@ -14,6 +14,10 @@ PKG_LONGDESC="The Mali GPU library used in Rockchip Platform for Odroidgo Advanc
 PKG_PATCH_DIRS+=" $(get_pkg_directory mali-bifrost)/patches"
 PKG_BUILD_FLAGS="lib32"
 
+if [ "${DEVICE}" = "RK3576" ]; then
+  PKG_MESON_OPTS_TARGET+=" -Dplatform=gbm -Dgpu=bifrost-g52 -Dversion=g2p0 -Dhooks=false"
+fi
+
 if [[ "${DEVICE}" =~ ^(OdroidGoAdvance|GameForce)$ ]]; then
   PKG_RK3326="yes"
 fi
@@ -21,7 +25,11 @@ fi
 unpack() {
   ${SCRIPTS}/get mali-bifrost
   mkdir -p ${PKG_BUILD}
-  tar --strip-components=1 -xf ${SOURCES}/mali-bifrost/mali-bifrost-${PKG_VERSION}.tar.gz -C ${PKG_BUILD}
+  local SRC_ARCHIVE="${SOURCES}/mali-bifrost/mali-bifrost-${PKG_VERSION}.tar.gz"
+  if [ "${DEVICE}" = "RK3576" ]; then
+    SRC_ARCHIVE="${SOURCES}/mali-bifrost/mali-bifrost-rk3576.tar.gz"
+  fi
+  tar --strip-components=1 -xf "${SRC_ARCHIVE}" -C ${PKG_BUILD}
   if [ "${PKG_RK3326}" = "yes" ]; then
     unzip -o "${SOURCES}/mali-bifrost/rk3326_r13p0_gbm_with_vulkan_and_cl.zip" -d ${PKG_BUILD}
   fi

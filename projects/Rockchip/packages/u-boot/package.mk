@@ -41,6 +41,11 @@ case "$PROJECT" in
     PKG_SHA256="eefe0b87e40d801a649a4ea6e062ed239aa08be1cbf81fa4e6a13e9344bf556d"
     PKG_URL="https://gitlab.com/firefly-linux/u-boot/-/archive/$PKG_VERSION/u-boot-$PKG_VERSION.tar.gz"
     PKG_PATCH_DIRS="RK356x"
+  elif [ "$DEVICE" == "RK3576" ]; then
+    PKG_VERSION="e9aca807ea508081ebab82acb499204fb2474f07"
+    PKG_SHA256="8bb35aad8a41c7cd1d2c908967b6f5658b30716ecb266c4b8c4c22918a961792"
+    PKG_URL="https://gitlab.com/firefly-linux/u-boot/-/archive/$PKG_VERSION/u-boot-$PKG_VERSION.tar.gz"
+    PKG_PATCH_DIRS="RK3576"
    else
     PKG_VERSION="8659d08d2b589693d121c1298484e861b7dafc4f"
     PKG_SHA256="3f9f2bbd0c28be6d7d6eb909823fee5728da023aca0ce37aef3c8f67d1179ec1"
@@ -82,6 +87,18 @@ export KCFLAGS="-Wno-error=address-of-packed-member -Wno-error=maybe-uninitializ
 			sed -i "s|\.\./rkbin|$(get_build_dir rkbin)|" make.sh
 			sed -i "s|\.\./rkbin|$(get_build_dir rkbin)|" scripts/fit.sh
 			cd $PKG_BUILD
+			./make.sh $($ROOT/$SCRIPTS/uboot_helper $PROJECT $DEVICE $UBOOT_SYSTEM config | sed "s|_defconfig||") --spl-new --burn-key-hash
+			./make.sh --idblock
+		elif [ "$DEVICE" == "RK3576" ]; then
+			export KCFLAGS="$KCFLAGS -Wno-error"
+			sed -i "s|CROSS_COMPILE_ARM64=\..*|CROSS_COMPILE_ARM64=${TOOLCHAIN}/bin/${TARGET_NAME}-|" make.sh
+			sed -i "s|aarch64-linux-gnu|${TARGET_NAME}|g" make.sh
+			sed -i "s|python2|python3|g" arch/arm/mach-rockchip/decode_bl31.py
+			sed -i "s|python2|python3|g" make.sh
+			sed -i "s|\.\./rkbin|$(get_build_dir rkbin)|" make.sh
+			sed -i "s|\.\./rkbin|$(get_build_dir rkbin)|" scripts/fit.sh
+			sed -i "s|\.\./rkbin|$(get_build_dir rkbin)|" scripts/fit-core.sh
+			cd ${PKG_BUILD}
 			./make.sh $($ROOT/$SCRIPTS/uboot_helper $PROJECT $DEVICE $UBOOT_SYSTEM config | sed "s|_defconfig||") --spl-new --burn-key-hash
 			./make.sh --idblock
 		elif [ "$DEVICE" == "OdroidM1" ]; then

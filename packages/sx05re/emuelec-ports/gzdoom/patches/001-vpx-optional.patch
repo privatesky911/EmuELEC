@@ -1,0 +1,10 @@
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -380,7 +380,7 @@
+ 	set( PROJECT_LIBRARIES ${PROJECT_LIBRARIES} ${VPX_LIBRARIES} )
+ else()
+-	message( SEND_ERROR "Could not find libvpx" )
++	message( STATUS "Could not find libvpx, building without VPX support" )
+ endif()
+ 
+ include_directories( SYSTEM "${BZIP2_INCLUDE_DIR}" "${LZMA_INCLUDE_DIR}" "${ZMUSIC_INCLUDE_DIR}" "${DRPC_INCLUDE_DIR}")

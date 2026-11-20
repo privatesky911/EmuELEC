@@ -20,7 +20,7 @@ if [[ ${DEVICE} == "OdroidGoAdvance"  ]] || [[ ${DEVICE} == "GameForce"  ]]; the
 	PKG_PATCH_DIRS="Rockchip/HH"
 fi
 
-if [[ ${DEVICE} == "OdroidM1"  ]] || [[ ${DEVICE} == "RK356x"  ]]; then 
+if [[ ${DEVICE} == "OdroidM1"  ]] || [[ ${DEVICE} == "RK356x"  ]] || [[ ${DEVICE} == "RK3576" ]]; then 
 	PKG_PATCH_DIRS="Rockchip"
 fi
 

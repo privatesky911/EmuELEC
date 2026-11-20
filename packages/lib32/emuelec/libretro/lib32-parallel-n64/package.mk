@@ -20,7 +20,7 @@ case ${DEVICE} in
   OdroidGoAdvance|GameForce)
     PKG_MAKE_OPTS_TARGET="platform=Odroidgoa"
   ;;
-  RK356x|OdroidM1)
+  RK356x|RK3576|OdroidM1)
     PKG_MAKE_OPTS_TARGET="platform=Odroidgoa-RK356x"
   ;;
   *)

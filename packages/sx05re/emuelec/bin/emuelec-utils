@@ -462,9 +462,15 @@ function createMultidisc() {
 
 function blank_buffer() {
 # Clears screen buffer
-  # Blank the buffer.
-  dd if=/dev/zero of=/dev/fb0 bs=256K conv=sync,noerror,notrunc > /dev/null 2>&1
-  dd if=/dev/zero of=/dev/fb1 bs=256K conv=sync,noerror,notrunc > /dev/null 2>&1
+  # Only write to real fb char devices; otherwise dd would create regular
+  # files in /dev (devtmpfs) and exhaust RAM on DRM-only boards.
+  if [ -c /dev/fb0 ]; then
+    dd if=/dev/zero of=/dev/fb0 bs=256K conv=sync,noerror,notrunc > /dev/null 2>&1
+  fi
+  if [ -c /dev/fb1 ]; then
+    dd if=/dev/zero of=/dev/fb1 bs=256K conv=sync,noerror,notrunc > /dev/null 2>&1
+  fi
+  return 0
 }
 
 function init_app_video() {

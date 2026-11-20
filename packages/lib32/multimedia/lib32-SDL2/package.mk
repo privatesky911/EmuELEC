@@ -63,7 +63,7 @@ case "${DEVICE}" in
     PKG_PATCH_DIRS+=" ${SDL2_DIRECTORY}/patches/Amlogic"
     PKG_CMAKE_OPTS_TARGET+=" -DSDL_MALI=ON -DSDL_KMSDRM=OFF"
   ;;
-  'OdroidGoAdvance'|'GameForce'|'RK356x'|'OdroidM1')
+  'OdroidGoAdvance'|'GameForce'|'RK356x'|'RK3576'|'OdroidM1')
     PKG_PATCH_DIRS+=" ${SDL2_DIRECTORY}/patches/Rockchip"
     PKG_CMAKE_OPTS_TARGET+=" -DSDL_KMSDRM=ON"
     PKG_DEPENDS_TARGET+=" lib32-libdrm lib32-mali-bifrost"
